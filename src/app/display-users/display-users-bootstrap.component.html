@@ -1,0 +1,28 @@
+<div >
+  <nav>
+    <ul class="nav justify-content-center">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/register-user">Add User</a>
+        </li>
+      </ul>
+</nav>
+<h1 mt-3 mb-3>{{title}}</h1>
+
+<table class="table table-hover" id="memberTable">
+    <thead class="thead-dark">
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+        </tr>
+    </thead>
+    <tbody id="userTableBody">
+      <tr *ngFor="let tempMembers of memberList">
+        <td>{{tempMembers.firstName}}</td>
+        <td>{{tempMembers.lastName}}</td>
+      </tr>
+        </tbody>
+</table>
+</div>
