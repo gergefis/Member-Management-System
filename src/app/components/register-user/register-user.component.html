@@ -1,0 +1,35 @@
+<!-- (ngSubmit)="onSubmit()" -->
+<div class="container">
+  <div class="box-container pt-5 pb-5 mt-5 mb-5">
+  <app-nav-bar></app-nav-bar>
+    <form class="form-control pt-5 pb-5 mt-5 mb-5" (ngSubmit)="onSubmit()" > <!-- #userForm="ngForm" -->
+      <div class="mb-3" class="mb-3">
+        <label>First Name</label>
+        <input class="form-control" type="text" [(ngModel)]="user.firstName" name="firstName" required>
+      </div>
+      <div class="mb-3">
+        <label>Last Name</label>
+        <input class="form-control"  type="text" [(ngModel)]="user.lastName" name="lastName" required>
+      </div>
+      <div class="mb-3">
+        <label>Gender</label>
+        <select  class="form-select" [(ngModel)]="user.gender" name="gender" required>
+          <option value="M">Male</option>
+          <option value="F">Female</option>
+        </select>
+      </div>
+
+        <app-datepicker></app-datepicker>
+
+      <div class="mb-3">
+        <label>Work Address</label>
+        <app-address addressLabel="Work Address" (addressChange)="onWorkAddressChange($event)"></app-address>
+      </div>
+      <div class="mb-3">
+        <label>Home Address</label>
+        <app-address addressLabel="Home Address" (addressChange)="onHomeAddressChange($event)"></app-address>
+      </div>
+      <button type="submit" class="btn btn-primary  btn-lg">Add User</button>
+    </form>
+  </div>
+  </div>

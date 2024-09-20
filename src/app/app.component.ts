@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'; //, OnInit
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,12 @@ import { Component } from '@angular/core';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'Management Employee System';
+  title = 'Employees Management System';
+
+  constructor(private router: Router) {}
+
+  navigateToAddUser() {
+    // Εδώ μπορείτε να προσθέσετε οποιαδήποτε λογική θέλετε πριν την πλοήγηση
+    this.router.navigate(['/add-user']);
+  }
 }
