@@ -1,6 +1,6 @@
 <div>
   <hr>
-  <app-nav-bar></app-nav-bar>
+  <!-- <app-nav-bar></app-nav-bar> -->
 <table class="table table-hover" id="memberTable">
     <thead class="thead-dark">
         <tr>
@@ -9,11 +9,11 @@
         </tr>
     </thead>
     <tbody id="userTableBody">
-      <tr *ngFor="let tempMembers of memberList">
-        <td>{{tempMembers.firstName}}</td>
-        <td>{{tempMembers.lastName}}</td>
-        <a [routerLink]="['/user-details', tempMembers.id]" target="_blank">View Details</a>
-      </tr>
+      <!-- <tr *ngFor="let tempMembers of memberList"> - // TODO
+        <td>{{tempMembers.firstName}}</td> 
+        <td>{{tempMembers.lastName}}</td> 
+        <!-- <a [routerLink]="['/user-details', tempMembers.id]" target="_blank">View Details</a> 
+      </tr> -->--> 
         </tbody>
 </table>
 </div>

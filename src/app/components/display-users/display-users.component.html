@@ -9,14 +9,19 @@
         </tr>
     </thead>
     <tbody>
-      <!-- app.component.html -->
-      <tr *ngFor="let tempUsers of userList">
+     
+      <tr *ngFor="let tempUsers of users">
         <td>{{tempUsers.firstName}}</td>
         <td>{{tempUsers.lastName}}</td>
       </tr>
+      
         </tbody>
     </table>
   </div>
+</div>
+
+<div *ngIf="users.length === 0">
+  No users found.
 </div>
 
 <router-outlet></router-outlet>
