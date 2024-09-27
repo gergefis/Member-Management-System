@@ -1,6 +1,6 @@
-// BEGIN - Reactive Forms
+
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray, NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { AddressType } from '../../common/user';
 
