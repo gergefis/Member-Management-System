@@ -2,258 +2,76 @@
 <div class="container">
   <div class="box-container pt-5 pb-5 mt-5 mb-5">
     <app-nav-bar></app-nav-bar>
-    <form class="form-control pt-5 pb-5 mt-5 mb-5" [formGroup]="registerForm" (ngSubmit)="onSubmit()" >
-      <div class="mb-3" [class.invalid]="isFieldInvalid('firstName')">
+    <form class="form-control pt-5 pb-5 mt-5 mb-5" [formGroup]="registerForm$" (ngSubmit)="[registerUser()]" >
+      
+<!-- First Name -->
+      <div class="mb-3">
         <label>First Name</label>
-        <input class="form-control" type="text" formControlName="firstName"/>
+        <input formControlName="firstName" class="form-control" type="text" />
         <mat-error *ngIf="isFieldInvalid('firstName')" class="error"> <!-- or span-->
           First Name is required
         </mat-error>
         </div>
-      <div class="mb-3" [class.invalid]="isFieldInvalid('lastName')">
-        <label>Last Name</label>
-        <input class="form-control" type="text" formControlName="lastName" />
-        <mat-error *ngIf="isFieldInvalid('lastName')" class="error">
-          Last Name is required
-        </mat-error>      </div>
 
-      <div class="mb-3" [class.invalid]="isFieldInvalid('gender')">
+<!-- Last Name -->
+      <div class="mb-3" >
+        <label>Last Name</label>
+        <input formControlName="lastName" class="form-control" type="text" />
+        <mat-error *ngIf="isFieldInvalid('lastName')" >
+          Last Name is required
+        </mat-error>      
+      </div>
+
+<!-- Select Gender  -->
+      <div class="mb-3" >
         <label for="gender">Gender</label>
         <select class="form-select" formControlName="gender">
           <option value="">Select Gender</option>
           <option value="MALE">Male</option> 
           <option value="FEMALE">Female</option>
         </select>
-        <mat-error *ngIf="isFieldInvalid('gender')" class="error">
+        <mat-error *ngIf="isFieldInvalid('gender')">
           Gender is required
         </mat-error>
-      </div>
+      </div> 
 
-      <!-- Birthdate -->
+<!-- Date of  Birth -->
       <div class="form-group mb-3">
-        <app-datepicker formControlName="birthdate" ></app-datepicker>
-      </div>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Date of Birth</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="birthdate" required> 
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-hint>Choose your birthdate MM/DD/YYYY</mat-hint>
+          <mat-error *ngIf="isFieldInvalid('birthdate')">
+          Birthdate is required
+        </mat-error> 
+         <mat-error *ngIf="birthdate?.valid">
+        </mat-error>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
 
-      <!-- Addresses -->
-      <div class="mb-3" formGroupName="workAddress">
-        <label>Work Address</label>
-        <app-address addressLabel="work Address" (addressChange)="onWorkAddressChange($event)"></app-address>
-      </div>
-      <div class="mb-3" formGroupName="homeAddress">
-        <label>Home Address</label>
-        <app-address addressLabel="home Address" (addressChange)="onHomeAddressChange($event)"></app-address>
-      </div>
-      <button type="submit" class="btn btn-primary btn-lg w-100">Add User</button>
+
+<!-- BEGIN - Addresses -->
+      <div formArrayName="addresses" class="form-control mb-3" >
+        <div [formGroupName]="0" class=" mb-3" >  
+          <label>Work Address</label>
+          <input formControlName="address"   
+                 placeholder="Enter Work Address" 
+                 class="form-control"/>
+       </div> 
+       
+   <!-- Home Address -->
+         <div [formGroupName]="1" class=" mb-3 "> 
+              <label>Home Address</label>  
+              <input formControlName="address"   
+                     placeholder="Enter Work Address" 
+                   class="form-control"/>
+        </div>
+      </div>  
+<!-- END - Addresses -->
+
+      <button type="submit" class="btn btn-primary btn-lg mt-5 w-100">Add User</button> 
     </form>
   </div>
 </div>
-
-<!-- END - Reactive Forms -->
-
-
-<!-- STANDALONE -->
-<!-- <div class="container">
-  <div class="box-container pt-5 pb-5 mt-5 mb-5">
-  <app-nav-bar></app-nav-bar>
-  <form class="form-control pt-5 pb-5 mt-5 mb-5" #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
-
-  <div class="form-group mb-3">
-    <mat-form-field>
-      <mat-label>First Name</mat-label>
-      <div class="mb-3">
-      <input class="form-control"
-        matInput
-        placeholder="Enter your first name"
-        [(ngModel)]="user.firstName"
-        name="firstName"
-        required
-        #firstName="ngModel"
-      />
-      </div>
-      <mat-error *ngIf="userForm.submitted && firstName.invalid">First Name is required</mat-error>
-    </mat-form-field>
-  </div>
-
-  <div class="form-group mb-3">
-  <mat-form-field appearance="fill" class="full-width">
-    <mat-label>Last Name</mat-label>
-    <input class="form-control"
-      matInput
-      placeholder="Enter your last name"
-      [(ngModel)]="user.lastName"
-      name="lastName"
-      required
-      #lastName="ngModel"
-    />
-    <mat-error *ngIf="userForm.submitted && lastName.invalid">Last Name is required</mat-error>
-  </mat-form-field>
-  </div>
-
-  <div class="form-group mb-3">
-  <mat-form-field appearance="fill" class="full-width">
-    <mat-label>Gender</mat-label>
-    <mat-select [(ngModel)]="user.gender" name="gender" required #gender="ngModel">
-      <mat-option value="M">Male</mat-option>
-      <mat-option value="F">Female</mat-option>
-    </mat-select>
-    <mat-error *ngIf="userForm.submitted && gender.invalid">Gender is required</mat-error>
-  </mat-form-field>
-  </div>
-
-<app-datepicker [(birthdate)]="user.birthdate" ></app-datepicker>  <!--TODO   [submitted]="submitted"
-
-
-  <div class="form-group mb-3">
-  <mat-form-field appearance="fill" class="full-width">
-    <mat-label>Home Address</mat-label>
-    <textarea
-      matInput
-      placeholder="Enter your home address"
-      (ngModelChange)="onWorkAddressChange($event)"
-      name="homeAddress"
-    ></textarea>
-  </mat-form-field>
-</div>
-
-  <div class="form-group mb-3">
-  <mat-form-field appearance="fill" class="full-width">
-    <mat-label>Work Address</mat-label>
-    <textarea
-      matInput
-      placeholder="Enter your work address"
-      (ngModelChange)="onHomeAddressChange($event)"
-      name="workAddress"
-    ></textarea>
-  </mat-form-field>
-  </div>
-
-  <button mat-raised-button color="primary" type="submit" [disabled]="userForm.invalid">
-    Add User
-  </button>
-</form>
-</div>
-</div> -->
-
-
-<!-- NO STANDALONE -->
-<!-- <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
-  <div class="form-group mb-3">
-    <label for="firstName">Name</label>
-    <input
-      type="text"
-      class="form-control"
-      id="firstName"
-      [(ngModel)]="user.firstName"
-      name="firstName"
-      required
-    />
-    <div *ngIf="userForm.submitted && !user.firstName" class="text-danger">Name is required.</div>
-  </div>
-
-  <div class="form-group mb-3">
-    <label for="lastName">Surname</label>
-    <input
-      type="text"
-      class="form-control"
-      id="lastName"
-      [(ngModel)]="user.lastName"
-      name="lastName"
-      required
-    />
-    <div *ngIf="userForm.submitted && !user.lastName" class="text-danger">Surname is required.</div>
-  </div>
-
-  <div class="form-group mb-3">
-    <label for="gender">Gender</label>
-    <select
-      class="form-select"
-      id="gender"
-      [(ngModel)]="user.gender"
-      name="gender"
-      required
-    >
-      <option value="" disabled>Select Gender</option>
-      <option value="M">Male</option>
-      <option value="F">Female</option>
-    </select>
-    <div *ngIf="userForm.submitted && !user.gender" class="text-danger">Gender is required.</div>
-  </div>
-
-  <div class="form-group mb-3">
-    <label for="birthdate">Birthdate</label>
-    <input
-      type="date"
-      class="form-control"
-      id="birthdate"
-      [(ngModel)]="user.birthdate"
-      name="birthdate"
-      required
-    />
-    <div *ngIf="userForm.submitted && !user.birthdate" class="text-danger">Birthdate is required.</div>
-  </div>
-
-  <div class="form-group mb-3">
-    <label for="workAddress">Work Address</label>
-    <textarea
-      class="form-control"
-      id="workAddress"
-      [(ngModel)]="user.workAddress"
-      name="workAddress"
-    ></textarea>
-  </div>
-
-  <div class="form-group mb-3">
-    <label for="homeAddress">Home Address</label>
-    <textarea
-      class="form-control"
-      id="homeAddress"
-      [(ngModel)]="user.homeAddress"
-      name="homeAddress"
-    ></textarea>
-  </div>
-
-  <button type="submit" class="btn btn-primary" [disabled]="!userForm.valid">
-    Register User
-  </button>
-</form> -->
-
-
-
-<!-- BEGIN the first 
-<div class="container">
-  <div class="box-container pt-5 pb-5 mt-5 mb-5">
-  <app-nav-bar></app-nav-bar>
-    <form class="form-control pt-5 pb-5 mt-5 mb-5" (ngSubmit)="onSubmit()" >  #userForm="ngForm" 
-      <div class="mb-3" class="mb-3">
-        <label>First Name</label>
-        <input class="form-control" type="text" [(ngModel)]="user.firstName" name="firstName" required>
-      </div>
-      <div class="mb-3">
-        <label>Last Name</label>
-        <input class="form-control"  type="text" [(ngModel)]="user.lastName" name="lastName" required>
-      </div>
-
-      <div class="mb-3">
-        <label for="gender">Gender</label>
-        <select class="form-select" [(ngModel)]="user.gender" name="gender" required> <!--TODO - Emplement required with Js-
-          <option value="MALE">Male</option>
-          <option value="FEMALE">Female</option>
-        </select>
-      </div>
-
-        <app-datepicker [(ngModel)]="user.birthdate" name="birthdate"></app-datepicker>
-        <app-datepicker [(birthdate)]="user.birthdate" (submitted)="onDateChange($event)"></app-datepicker>
-
-      <div class="mb-3">
-        <label>Work Address</label>
-        <app-address addressLabel="Work Address" (addressChange)="onWorkAddressChange($event)"></app-address>
-      </div>
-      <div class="mb-3">
-        <label>Home Address</label>
-        <app-address addressLabel="Home Address" (addressChange)="onHomeAddressChange($event)"></app-address>
-      </div>
-      <button type="submit" class="btn btn-primary  btn-lg">Add User</button>
-    </form>
-  </div>
-  </div> 
-  END the first -->

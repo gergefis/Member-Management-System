@@ -1,191 +1,80 @@
 // BEGIN - Reactive Forms
-import { Component, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormArray, NgForm } from '@angular/forms';
 import { UserService } from '../../services/user.service';
-import { User, Address, Gender } from '../../common/user';
+import { AddressType } from '../../common/user';
+
 
 @Component({
   selector: 'app-register-user',
   templateUrl: './register-user.component.html',
   styleUrls: ['./register-user.component.css']
 })
-export class RegisterUserComponent implements OnInit{
-  // @Input()  birthdateChange;
-  // @Output() bithdate;
+export class RegisterUserComponent{
 
-  isSubmitted: boolean = false;
+  isSubmitted: boolean = true;
+  registerForm$: FormGroup;
 
-  registerForm = this.fb.group({  //provide our controls
-    firstName: ['', Validators.required], 
-    lastName: ['', Validators.required],  
-    gender: ['', Validators.required], 
-    birthdate: [null, Validators.required], // to θέλω Date
-    // addresses: this.fb.array([ // I use FormArray for addresses
-    workAddress: this.fb.group({
-      address: [''],
-      addressType: ['WORK'] // Προεπιλογή τύπου
-    }),
-      homeAddress: this.fb.group({
-        address: [''],
-        addressType: ['HOME']
-      })
-      // this.createAddress('WORK'),
-      // this.createAddress('HOME')
-    // ])
+  userDetails: any;
 
-    // workAddress: ['', 'WORK'],
-    // homeAddress: ['', 'HOME']
-      // [
-      //   new Address('', 'WORK'),
-      //   new Address('', 'HOME')
-      // ]
-  }); 
-
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private userService: UserService) {
+     //provide the controls
+      this.registerForm$ = this.fb.group({  
+        firstName: ['', Validators.required], 
+        lastName: ['', Validators.required],  
+        gender: ['', Validators.required], 
+        birthdate: ['', Validators.required], 
+       
+        addresses: this.fb.array([
+        this.createAddress('',AddressType.WORK),
+        this.createAddress('',AddressType.HOME)
+        ])
+      });
+    }
 
   isFieldInvalid(fieldName: string): boolean {
-    const field = this.registerForm.get(fieldName);
+    const field = this.registerForm$.get(fieldName);
     return !!(field?.invalid && (field.dirty ||
       field.touched || this.isSubmitted));
   }
 
-  ngOnInit(): void{}
-
-  createAddress(type: 'WORK' | 'HOME'): FormGroup {
+  createAddress(inputAddress: string, type: AddressType  ): FormGroup { // 'HOME' | 'WORK'
     return this.fb.group({
-      address: [''],
+      address: [inputAddress],
       addressType: [type]
     });
   }
 
-  // get addresses(): FormArray {
-  //   return this.registerForm.get('addresses') as FormArray;
-  // }
+  registerUser() {
 
-  onWorkAddressChange(newAddress: Address) {
-    const workAddressControl = this.registerForm.get('workAddress');  // as FormGroup
-    if (workAddressControl) {
-      workAddressControl.patchValue({
-        address: newAddress.address,
-        addressType: newAddress.addressType
-    });
-  }
-}
-
-  onHomeAddressChange(newAddress: Address) {
-    const homeAddressControl = this.registerForm.get('homeAddress');
-    if (homeAddressControl) {
-      homeAddressControl.patchValue({
-        address: newAddress.address, 
-        addressType: newAddress.addressType
-      });
+    if (this.registerForm$.valid) {
+      console.log('Register Form Value: ', this.registerForm$.value);
+      this.userService.addUser(this.registerForm$.value).subscribe( 
+      (response) => {
+       
+        console.log(response.address);
+        alert('User '+ response.firstName + ' ' + response.lastName + ' added successfully');
+        console.log('DES EDO =====>' + this.addresses); 
+        this.registerForm$.reset();
+      },
+      (err) => {
+        console.error('Error when adding user:', err);
+        console.log('return ERROR : ' + this.addresses); 
+        }
+      );
     }
   }
 
-  onSubmit() {
-        console.log(
-          'User added successfully', 
-          this.registerForm.value, 
-          this.registerForm.invalid
-        );
-        this.isSubmitted = true;
+    get lastName() {
+      return this.registerForm$.get('lastName');
+    }
+    get birthdate() {
+      return this.registerForm$.get('birthdate');
+    }
+    get gender() {
+      return this.registerForm$.get('gender');
+    }
+    get addresses(): FormArray {
+      return this.registerForm$.get('addresses') as FormArray;
     }
   }
-
-// END no-standalone
-
-
-
-
-// BEGIN - standalone component
-
-// import { Component, OnInit } from '@angular/core';
-// import { UserService } from '../../services/user.service'; 
-// import { User, Address, Gender} from '../../common/user';
-
-// import {ChangeDetectionStrategy} from '@angular/core';
-// import { NgForm } from '@angular/forms'; 
-// import {MatSelectModule} from '@angular/material/select';
-// import {MatInputModule} from '@angular/material/input';
-// import {MatFormFieldModule} from '@angular/material/form-field';
-// import { MatDatepickerModule } from '@angular/material/datepicker';
-// import { FormsModule } from '@angular/forms';
-// import { MatButtonModule } from '@angular/material/button';
-// import { CommonModule } from '@angular/common';
-// import { NavBarComponent } from '../nav-bar/nav-bar.component';
-// import { DatepickerComponent } from '../datepicker/datepicker.component';
-// import { MatNativeDateModule } from '@angular/material/core';
-
-// @Component({
-//   selector: 'app-register-user',
-//   templateUrl: './register-user.component.html',
-//   styleUrl: './register-user.component.css',
-//   standalone: true,
-//   imports: [
-//     NavBarComponent,
-//     DatepickerComponent,
-//     MatFormFieldModule,  // Σωστή εισαγωγή του Angular Material module
-//     MatInputModule,
-//     MatSelectModule,
-//     MatButtonModule,
-//     MatNativeDateModule,
-//     FormsModule,
-//     NavBarComponent,
-//     CommonModule,
-//     MatDatepickerModule
-//   ],
-// })
-// export class RegisterUserComponent implements OnInit {
-//   user: User;
-//   Gender = Gender;
-//   // Address = Address;
-//   submitted : boolean = false; 
-
-//   // birthdate: Date  //For DatePicker
-  
-//   constructor(private userService: UserService) {
-//     this.user = new User(
-//       '', //firstName
-//       '', //lastName
-//       null as unknown as Gender, // default gender // Gender.MALE
-//       new Date(), // null,  //null as unknown as Date, // //TODO
-//       [
-//         new Address('', 'WORK'), 
-//         new Address('', 'HOME')  
-//       ]
-//     );
-//   }
-  
-//   ngOnInit() {}
-
-//   onSubmit(userForm: NgForm) {
-//     this.submitted = true; // Ο χρήστης υπέβαλε τη φόρμα
-//     if (userForm.valid) {
-//       this.userService.addUser(this.user).subscribe({
-//         next: (response: any) => {
-//           console.log('User added successfully', response);
-//         },
-//         error: (error: any) => {
-//           console.error('There was an error!', error);
-//         }
-//       });
-//     }
-//   }
-
-//     // save AddressComponent
-//     onWorkAddressChange(newAddress: any) {
-//       const workAddress = this.user.addresses.find(addr => addr.addressType === 'WORK');
-//     if (workAddress) {
-//       workAddress.address = newAddress;
-//     }
-//   }
-     
-//     onHomeAddressChange(newAddress: any) {
-//       const homeAddress = this.user.addresses.find(addr => addr.addressType === 'HOME');
-//       if (homeAddress) {
-//         homeAddress.address = newAddress;
-//       }
-    
-//     }
-
-//   }
