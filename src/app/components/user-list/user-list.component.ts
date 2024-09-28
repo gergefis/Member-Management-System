@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { Observable } from 'rxjs';
 import { User } from '../../common/user';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-list',
@@ -10,36 +10,81 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './user-list.component.css'
 })
 export class UserListComponent implements OnInit {
-  // @Input() userDetails$: number;
+ 
 
-  userDetails: any; // Observable<User[]>;  
+  userDetails: any;  
   user: any;
-  userId: any; //Observable<User[]>;
-  selectedUser$: Observable<User> | undefined;
+  userId: any; 
+  errorMessage: string | null = null; 
 
   errors: any = [];
 
-  constructor(private userService: UserService, private route: ActivatedRoute) {
+
+  constructor(
+    private userService: UserService, 
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
     // this.userDetails$ = this.userService.getUsers();
-   
   }
   
   ngOnInit() {
-    this.userId = this.route.snapshot.paramMap.get('id');
-    alert(this.userId);
-      this.userService.getUserById(this.userId).subscribe((resp: any) => {
-        console.log(resp);
-        this.userDetails = resp;
-        console.log("userDetails" + this.userDetails);
-        
-      });
-  }
 
-  // getUserDetails(id: number) {
-  //   console.log('Fetching details for user ID:', id);
-  //   this.selectedUser$ = this.userService.getUserById(id).subscribe;
-  // }
+    const userIdIstring = this.route.snapshot.paramMap.get('id');
+    if (userIdIstring) {
+      this.userId = Number(userIdIstring);
+
+      this.userService.getUserById(this.userId).subscribe(
+        (resp) => {
+          this.userDetails = resp;
+          console.log("userDetails: ===>", this.userDetails);
+
+           // Εξαγωγή διευθύνσεων και φιλτράρισμα
+        const workAddress = this.userDetails.addresses.find((addr: any) => addr.addressType === 'WORK');
+        const homeAddress = this.userDetails.addresses.find((addr: any) => addr.addressType === 'HOME');
+
+        // Αντιστοιχία τιμών στις μεταβλητές
+        this.userDetails.workAddress = workAddress ? workAddress.address : 'N/A';
+        this.userDetails.homeAddress = homeAddress ? homeAddress.address : 'N/A';
+        },
+        (error) => {
+          console.error("Error fetching user details:", error);
+        }
+      );
+    }}
+    
 
   updateUser(){}
+
+
+deleteUser(event: any, userId: number){
+    
+    if(confirm('Are you sure, you want to delete user ' + 
+                this.userDetails.firstName + ' ' + this.userDetails.lastName +' ?')){
+      
+      event.target.innetText = "Deleting...";
+      this.userService.deleteUser(userId).subscribe((response) => {
+        alert((response as { message: string }).message);
+      },
+      (err) => {
+        console.error('Error when adding user:', err);
+
+        if (err.error && err.error.message) {
+          this.errorMessage = err.error.message; // Αποθηκεύστε το μήνυμα λάθους
+          alert(this.errorMessage);
+        } else {
+          this.errorMessage = 'An unknown error occurred';
+        }
+         
+        }
+
+    );
+
+      this.router.navigate(['/display-users']); 
+
+    }
+  }
+
+
 
 }

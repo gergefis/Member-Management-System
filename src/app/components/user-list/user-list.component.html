@@ -10,21 +10,24 @@
             <th>Last Name</th>
             <th>Gender</th>
             <th>Birthdate</th>
+            <th>Work Address</th>
+            <th>Home Address</th>
             <th>Action</th>
         </tr>
     </thead>
     <tbody id="userTableBody">
       <tr>    <!-- <tr *ngIf="userDetails$ | async as selectedUser"> -->
-        <td>{{userDetails.id}}</td>
-        <td>{{userDetails.firstName}}</td> 
-        <td>{{userDetails.lastName}}</td> 
-        <td>{{userDetails.gender}}</td> 
-        <td>{{userDetails.birthdate}}</td>
-        <!-- <td>{{user.workAddress}}</td> -->
-        <!--<td>{{user.homeAddress}}</td>  [routerLink]="['/user-details', user.id]" -->
+        <td>{{userDetails?.id}}</td>
+        <td>{{userDetails?.firstName}}</td> 
+        <td>{{userDetails?.lastName}}</td> 
+        <td>{{userDetails?.gender}}</td> 
+        <td>{{userDetails?.birthdate}}</td>
+        <td>{{userDetails?.workAddress}}</td>
+        <td>{{userDetails?.homeAddress}}</td>  <!--[routerLink]="['/user-details', user.id]" -->
         <!-- <a class="btn-primary"  target="_blank">View Details</a> -->
         <td>
-          <button class="btn btn-danger" (click)="deleteUser($event, userDetails.id)">Delete</button> <!-- Κουμπί Delete -->
+          <button class="btn btn-danger" 
+          (click)="deleteUser($event, userDetails?.id)">Delete</button> <!-- Κουμπί Delete -->
         </td>
       </tr>  
 
