@@ -24,9 +24,7 @@ export class UserListComponent implements OnInit {
     private userService: UserService, 
     private route: ActivatedRoute,
     private router: Router
-  ) {
-    // this.userDetails$ = this.userService.getUsers();
-  }
+  ) {}
   
   ngOnInit() {
 
@@ -38,11 +36,9 @@ export class UserListComponent implements OnInit {
         (resp) => {
           this.userDetails = resp;
 
-           // Εξαγωγή διευθύνσεων και φιλτράρισμα
         const workAddress = this.userDetails.addresses.find((addr: any) => addr.addressType === 'WORK');
         const homeAddress = this.userDetails.addresses.find((addr: any) => addr.addressType === 'HOME');
 
-        // Αντιστοιχία τιμών στις μεταβλητές
         this.userDetails.workAddress = workAddress ? workAddress.address : 'N/A';
         this.userDetails.homeAddress = homeAddress ? homeAddress.address : 'N/A';
         },
@@ -51,10 +47,8 @@ export class UserListComponent implements OnInit {
         }
       );
     }}
-    
 
   updateUser(){}
-
 
 deleteUser(event: any, userId: number){
     
@@ -70,7 +64,7 @@ deleteUser(event: any, userId: number){
         console.error('Error when adding user:', err);
 
         if (err.error && err.error.message) {
-          this.errorMessage = err.error.message; // Αποθηκεύστε το μήνυμα λάθους
+          this.errorMessage = err.error.message;
           alert(this.errorMessage);
         } else {
           this.errorMessage = 'An unknown error occurred';
