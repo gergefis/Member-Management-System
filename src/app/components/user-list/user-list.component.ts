@@ -37,7 +37,6 @@ export class UserListComponent implements OnInit {
       this.userService.getUserById(this.userId).subscribe(
         (resp) => {
           this.userDetails = resp;
-          console.log("userDetails: ===>", this.userDetails);
 
            // Εξαγωγή διευθύνσεων και φιλτράρισμα
         const workAddress = this.userDetails.addresses.find((addr: any) => addr.addressType === 'WORK');
