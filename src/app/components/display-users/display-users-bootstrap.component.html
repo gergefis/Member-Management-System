@@ -13,7 +13,7 @@
     </thead>
 <!-- Table Body -->
     <tbody id="userTableBody">
-      <tr *ngFor="let tempUser of userDetails$ | async" > 
+      <tr *ngFor="let tempUser of (userDetails$ | async)?.users" > 
         <td>{{tempUser.id}}</td>
         <td>{{tempUser.firstName}}</td> 
         <td>{{tempUser.lastName}}</td> 
