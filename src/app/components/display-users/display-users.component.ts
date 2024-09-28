@@ -11,7 +11,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class DisplayUsersComponent {
   // getusersForm$: FormGroup;
-  userDetails$: Observable <{ users: User[] }>; //
+  userDetails$: Observable <{ users: User[]}>; //
 
   constructor(private fb: FormBuilder, private userService: UserService) {
     
