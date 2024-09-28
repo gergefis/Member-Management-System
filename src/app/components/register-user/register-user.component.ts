@@ -19,7 +19,7 @@ export class RegisterUserComponent{
   errorMessage: string | null = null; 
 
   constructor(private fb: FormBuilder, private userService: UserService) {
-     //provide the controls
+     
       this.registerForm$ = this.fb.group({  
         firstName: ['', Validators.required], 
         lastName: ['', Validators.required],  
@@ -62,7 +62,7 @@ export class RegisterUserComponent{
         console.error('Error when adding user:', err);
 
         if (err.error && err.error.message) {
-          this.errorMessage = err.error.message; // Αποθηκεύστε το μήνυμα λάθους
+          this.errorMessage = err.error.message;
           alert(this.errorMessage);
         } else {
           this.errorMessage = 'An unknown error occurred';
