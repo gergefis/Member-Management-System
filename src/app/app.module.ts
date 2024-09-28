@@ -11,7 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DisplayUsersComponent } from './components/display-users/display-users.component';
 import { HeaderComponent } from './components/header/header.component';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { AddressComponent } from './components/address/address.component';
 import { CommonModule } from '@angular/common';
@@ -20,9 +20,10 @@ import { DatepickerComponent } from './components/datepicker/datepicker.componen
 import { RegisterUserComponent } from './components/register-user/register-user.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatDatepickerActions, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { MatNativeDateModule } from '@angular/material/core';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
   declarations: [
@@ -33,23 +34,25 @@ import { MatNativeDateModule } from '@angular/material/core';
     AddressComponent,
     DatepickerComponent,
     UserListComponent,
-    DisplayUsersComponent
+    DisplayUsersComponent,
   ],
   imports: [
     CommonModule,
+    BrowserModule,
     FormsModule,
     ReactiveFormsModule, 
+    HttpClientModule,
     MatFormFieldModule,  
     MatInputModule,
-    BrowserModule,
     AppRoutingModule,
-    FormsModule,
-    HttpClientModule,
     GoogleMapsModule,
-    ReactiveFormsModule,
     MatNativeDateModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    BrowserAnimationsModule
 ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  providers: [
+    provideAnimationsAsync()
+  ]
 })
 export class AppModule { }
