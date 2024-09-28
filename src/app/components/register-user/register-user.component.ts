@@ -16,6 +16,7 @@ export class RegisterUserComponent{
   registerForm$: FormGroup;
 
   userDetails: any;
+  errorMessage: string | null = null; 
 
   constructor(private fb: FormBuilder, private userService: UserService) {
      //provide the controls
@@ -49,17 +50,25 @@ export class RegisterUserComponent{
 
     if (this.registerForm$.valid) {
       console.log('Register Form Value: ', this.registerForm$.value);
+
+      this.errorMessage = null;  
+
       this.userService.addUser(this.registerForm$.value).subscribe( 
       (response) => {
-       
-        console.log(response.address);
         alert('User '+ response.firstName + ' ' + response.lastName + ' added successfully');
         console.log('DES EDO =====>' + this.addresses); 
         this.registerForm$.reset();
       },
       (err) => {
         console.error('Error when adding user:', err);
-        console.log('return ERROR : ' + this.addresses); 
+
+        if (err.error && err.error.message) {
+          this.errorMessage = err.error.message; // Αποθηκεύστε το μήνυμα λάθους
+          alert(this.errorMessage);
+        } else {
+          this.errorMessage = 'An unknown error occurred';
+        }
+         
         }
       );
     }
