@@ -17,19 +17,12 @@ export class UserService {
     return this.httpClient.post<User>(`${this.apiUrl}/registerUser`, user);
   }
 
-  // public addUser(user: any) {  //maybe needed array Observable<User[]>
-  //   return this.httpClient.post(this.apiUrl + '/registerUser', user);
-  // }
-
   
 getUsers(): Observable<{ users: User[] }> { // Ενημερώστε την επιστροφή ώστε να περιλαμβάνει το users
   return this.httpClient.get<{ users: User[] }>(`${this.apiUrl}/getUsers`);
 }
 
-
-
-
-  getUserById(userId: number): Observable<User> {  // TODO
+  getUserById(userId: number): Observable<User> { 
     return this.httpClient.get<User>(`${this.apiUrl}/${userId}`).pipe( 
     catchError(error => {
       console.error('Error fetching user by ID:', error);
@@ -39,11 +32,11 @@ getUsers(): Observable<{ users: User[] }> { // Ενημερώστε την επ�
   );
 }
 
-  public deleteUser(userId: any) { // TODO
+  public deleteUser(userId: any) { 
     return this.httpClient.delete(`${this.apiUrl}/deleteUser/${userId}`);
   }
 
-  public updateUser(user: any) {  // TODO
+  public updateUser(user: any) {  
     return this.httpClient.put(this.apiUrl + '/updateUser', user);
   }
 
