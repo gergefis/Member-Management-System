@@ -64,6 +64,7 @@ deleteUser(event: any, userId: number){
       event.target.innetText = "Deleting...";
       this.userService.deleteUser(userId).subscribe((response) => {
         alert((response as { message: string }).message);
+        this.router.navigate(['/display-users']); 
       },
       (err) => {
         console.error('Error when adding user:', err);
@@ -79,7 +80,7 @@ deleteUser(event: any, userId: number){
 
     );
 
-      this.router.navigate(['/display-users']); 
+      
 
     }
   }
