@@ -24,6 +24,7 @@ export class NavBarComponent {
     const currentRoute = this.router.url;
     this.activeTitle = currentRoute.includes('display-users') ? 'Display Users' :
                        currentRoute.includes('register-user') ? 'Add New User' :
+                       currentRoute.includes('user-list') ? 'User Details' :
                        'Home';
 
     this.titleService.setTitle(`${this.activeTitle} | Employees Management System`);
