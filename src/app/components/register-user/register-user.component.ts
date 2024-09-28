@@ -56,7 +56,6 @@ export class RegisterUserComponent{
       this.userService.addUser(this.registerForm$.value).subscribe( 
       (response) => {
         alert('User '+ response.firstName + ' ' + response.lastName + ' added successfully');
-        console.log('DES EDO =====>' + this.addresses); 
         this.registerForm$.reset();
       },
       (err) => {
