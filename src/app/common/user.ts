@@ -1,5 +1,5 @@
 export class User {
- public id?: number; // TODO
+ public id?: number; 
  public firstName: string;
  public lastName: string;
  public gender: Gender;
