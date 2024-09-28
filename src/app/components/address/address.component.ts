@@ -1,44 +1,37 @@
-import { Component, AfterViewInit, EventEmitter, Input, Output, ViewChild, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, EventEmitter, Input, Output, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { Address } from '../../common/user';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-address',
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.css']
 })
-export class AddressComponent { //implements AfterViewInit 
+export class AddressComponent implements OnInit {
 
-  @Input() addressLabel: string = 'Address'; // Εισαγωγή για το label της διεύθυνσης
-  @Output() addressChange: EventEmitter<Address> = new EventEmitter<Address>();
+  @Input() addressLabel: string = 'Address';
+  @Input() addressData: { address: string, addressType: string } | null = null;
+  @Output() addressChange = new EventEmitter<any>(); 
 
-  address: string = '';
-  addressType:'WORK' | 'HOME' = 'WORK';
-
+  addressForm: FormGroup;
   
-  @ViewChild('addressInput', { static: false }) addressInput!: ElementRef;
+  
+  constructor(private fb: FormBuilder) {
+    this.addressForm = this.fb.group({
+      address: '', 
+      addressType: this.addressData?.addressType 
+    });
+  }
 
+  ngOnInit() {
+    if (this.addressData) {
+      this.addressForm.patchValue(this.addressData);
+    }
+  }
 
-  // ngAfterViewInit(): void {
-  //   const input = this.addressInput.nativeElement as HTMLInputElement;
-  //   const autocomplete = new google.maps.places.Autocomplete(input);
-  
-  //   autocomplete.addListener('place_changed', () => {
-  //     const place = autocomplete.getPlace();
-  //     if (place.formatted_address) {
-  //       this.address = place.formatted_address;
-  
-  //       // Εδώ πρέπει να ορίσεις το addressType, π.χ. από επιλογή χρήστη ή default
-  //       const newAddress = new Address(this.address, this.addressType); // Βεβαιώσου ότι η addressType είναι σωστά ορισμένη
-  //       this.addressChange.emit(newAddress);
-        
-  //       console.log('Selected address:', newAddress);
-  //     }
-  //   });
-  // }
-  
-  onAddressInput(event: Event) {
-    const input = event.target as HTMLInputElement;
-    this.address = input.value;
-    this.addressChange.emit(new Address(this.address, this.addressType)); // Χρησιμοποιώντας Address
+  onAddressChange() {
+    if (this.addressForm.valid) {
+      this.addressChange.emit(this.addressForm.value);
+    }
   }
 }
